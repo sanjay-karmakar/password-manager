@@ -25,7 +25,7 @@ def generate_password():
     pyperclip.copy(password)
 
 
-# ---------------------------- SAVE PASSWORD ------------------------------- #
+# ---------------------------- SAVE ------------------------------- #
 def save():
     website = website_entry.get()
     email = email_entry.get()
@@ -66,6 +66,21 @@ def save():
                 email_entry.delete(0, END)
                 password_entry.delete(0, END)
 
+
+# ---------------------------- Find Password ------------------------------- #
+def find_password():
+    website = website_entry.get()
+
+    with open("data.json") as data_file:
+        data = json.load(data_file)
+        
+        if website in data:
+            print(data)
+            email = data[website]["email"]
+            password = data[website]["password"]
+            messagebox.showinfo(title=website, message=f"{email}\n{password}")
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title("Password Manager")
@@ -83,6 +98,10 @@ website_label.grid(column=0, row=1)
 website_entry = Entry(width=43)
 website_entry.grid(column=1, row=1, columnspan=2, sticky="EW")
 website_entry.focus()
+
+# Search button
+search_button = Button(text="Search", command=find_password)
+search_button.grid(column=2, row=1, sticky="EW")
 
 # Email/Username Label and Entry
 email_label = Label(text="Email/Username:")
